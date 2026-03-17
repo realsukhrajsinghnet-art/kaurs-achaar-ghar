@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaur’s Achaar Ghar</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gurmukhi:wght@400;600&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--mustard:#DAA520;
+--terracotta:#E2725B;
+--green:#355E3B;
+--cream:#F5F5DC;
+}
+
+body{
+margin:0;
+font-family:Poppins;
+background:var(--cream);
+}
+
+header{
+background:var(--green);
+color:white;
+padding:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.cart-btn{
+background:var(--mustard);
+border:none;
+padding:8px 15px;
+color:white;
+cursor:pointer;
+}
+
+.hero{
+text-align:center;
+padding:60px 20px;
+background:#f2e7c9;
+}
+
+.punjabi{
+font-family:'Noto Sans Gurmukhi';
+}
+
+.container{
+padding:20px;
+max-width:1100px;
+margin:auto;
+}
+
+.products{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+}
+
+.product{
+background:white;
+padding:15px;
+border-radius:10px;
+text-align:center;
+box-shadow:0 3px 10px rgba(0,0,0,.1);
+}
+
+.product img{
+width:100%;
+border-radius:8px;
+}
+
+.add-btn{
+background:var(--green);
+color:white;
+border:none;
+padding:8px 15px;
+cursor:pointer;
+margin-top:5px;
+}
+
+.gallery{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+}
+
+.gallery img{
+width:100%;
+border-radius:8px;
+}
+
+#cart{
+position:fixed;
+right:-320px;
+top:0;
+width:300px;
+height:100%;
+background:white;
+box-shadow:-3px 0 10px rgba(0,0,0,.2);
+padding:20px;
+transition:0.3s;
+overflow:auto;
+}
+
+#cart.active{
+right:0;
+}
+
+.cart-item{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+}
+
+.checkout{
+background:var(--terracotta);
+border:none;
+color:white;
+padding:10px;
+width:100%;
+margin-top:10px;
+cursor:pointer;
+}
+
+footer{
+background:var(--green);
+color:white;
+text-align:center;
+padding:20px;
+margin-top:40px;
+}
+
+.whatsapp{
+position:fixed;
+bottom:15px;
+right:15px;
+background:#25D366;
+color:white;
+padding:12px 18px;
+border-radius:50px;
+text-decoration:none;
+font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div>
+<strong>Kaur’s Achaar Ghar</strong><br>
+<span class="punjabi">ਘਰੇਲੂ ਅੱਚਾਰ</span>
+</div>
+
+<button class="cart-btn" onclick="toggleCart()">Cart (<span id="count">0</span>)</button>
+</header>
+
+<section class="hero">
+<h1>Authentic Punjabi Pickles</h1>
+<p>Made with mustard oil & traditional recipes from Amritsar</p>
+</section>
+
+<section class="container">
+
+<h2>Our Pickles</h2>
+
+<div class="products">
+
+<div class="product">
+<img src="mango.jpg">
+<h3>Mango Achaar</h3>
+<p>₹250</p>
+<button class="add-btn" onclick="addCart('Mango Achaar',250)">Add to Cart</button>
+</div>
+
+<div class="product">
+<img src="mirchi.jpg">
+<h3>Mirchi Achaar</h3>
+<p>₹220</p>
+<button class="add-btn" onclick="addCart('Mirchi Achaar',220)">Add to Cart</button>
+</div>
+
+<div class="product">
+<img src="lemon.jpg">
+<h3>Lemon Achaar</h3>
+<p>₹230</p>
+<button class="add-btn" onclick="addCart('Lemon Achaar',230)">Add to Cart</button>
+</div>
+
+<div class="product">
+<img src="combo.jpg">
+<h3>Combo Pack</h3>
+<p>₹650</p>
+<button class="add-btn" onclick="addCart('Combo Pack',650)">Add to Cart</button>
+</div>
+
+</div>
+
+</section>
+
+<section class="container">
+
+<h2>Gallery</h2>
+
+<div class="gallery">
+<img src="g1.jpg">
+<img src="g2.jpg">
+<img src="g3.jpg">
+<img src="g4.jpg">
+<img src="g5.jpg">
+<img src="g6.jpg">
+</div>
+
+</section>
+
+<div id="cart">
+
+<h2>Your Cart</h2>
+
+<div id="cart-items"></div>
+
+<h3>Total: ₹<span id="total">0</span></h3>
+
+<button class="checkout" onclick="payNow()">Pay Online</button>
+
+<button class="checkout" onclick="whatsappOrder()">Order on WhatsApp</button>
+
+</div>
+
+<footer>
+
+<p>Amritsar, Punjab</p>
+<p>FSSAI Certified | Organic Ingredients</p>
+<p>Handmade with ❤️</p>
+
+</footer>
+
+<a class="whatsapp" href="https://wa.me/919999999999">WhatsApp</a>
+
+<script>
+
+let cart=[];
+let total=0;
+
+function toggleCart(){
+document.getElementById("cart").classList.toggle("active");
+}
+
+function addCart(name,price){
+
+cart.push({name,price});
+total+=price;
+
+document.getElementById("count").innerText=cart.length;
+
+displayCart();
+
+}
+
+function displayCart(){
+
+let items=document.getElementById("cart-items");
+items.innerHTML="";
+
+cart.forEach(item=>{
+
+let div=document.createElement("div");
+div.className="cart-item";
+div.innerHTML=item.name+" ₹"+item.price;
+
+items.appendChild(div);
+
+});
+
+document.getElementById("total").innerText=total;
+
+}
+
+function whatsappOrder(){
+
+let message="Order:%0A";
+
+cart.forEach(item=>{
+message+=item.name+" ₹"+item.price+"%0A";
+});
+
+message+="Total ₹"+total;
+
+window.open("https://wa.me/919999999999?text="+message);
+
+}
+
+function payNow(){
+
+var options={
+key:"YOUR_RAZORPAY_KEY",
+amount:total*100,
+currency:"INR",
+name:"Kaur's Achaar Ghar",
+description:"Pickle Order",
+handler:function(response){
+alert("Payment Successful!");
+}
+};
+
+var rzp=new Razorpay(options);
+rzp.open();
+
+}
+
+</script>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+</body>
+</html>
